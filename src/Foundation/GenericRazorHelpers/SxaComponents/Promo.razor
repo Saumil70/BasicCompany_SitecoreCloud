@@ -1,0 +1,23 @@
+﻿@using GenericRazorHelpers.SxaHelper
+@inherits BaseModelComponent<GenericRazorHelpers.SxaModels.Promo>
+
+<div class="component promo @Model.Styles @Model.GridParameters" id="@Model.Id">
+    <div class="component-content">
+        <div class="field-promoicon">
+            <ImageHelper For="@Model.PromoIcon"/>
+        </div>
+        <div class="promo-text">
+            @{
+                string variantClass = Model.FieldNames == GenericRazorHelpers.SxaModels.Promo.VARIANT_WITH_TEXT ? "promo-text" : string.Empty;
+            }
+            <div>
+                <div class="field-promotext">
+                    <TextFieldHelper CssClass="@variantClass" Field="@Model.PromoText" />
+                </div>
+            </div>
+            <div class="field-promolink">
+                <LinkHelper CssClass="@variantClass" Field="@Model.PromoLink" />
+            </div>
+        </div>
+    </div>
+</div>

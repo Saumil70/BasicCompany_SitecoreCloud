@@ -1,0 +1,14 @@
+﻿@using BasicCompany.Blazor.Views.Default
+@using Sitecore.LayoutService.Client.Response.Model.Fields
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model Sitecore.LayoutService.Client.Response.Model.Route
+
+@{
+    Layout = "~/Pages/_Layout.cshtml";
+}
+
+@{
+    ViewData["Title"] = Model.ReadField<TextField>("NavigationTitle")?.Value ?? Model.ReadField<TextField>("Title")?.Value ?? "Untitled";
+}
+
+<component type="typeof(DefaultRouteComponent)" render-mode="ServerPrerendered"/>

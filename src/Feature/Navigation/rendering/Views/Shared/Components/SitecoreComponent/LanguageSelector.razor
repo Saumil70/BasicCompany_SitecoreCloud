@@ -1,0 +1,31 @@
+﻿@using System.Net.Http
+@using Newtonsoft.Json
+@using BasicCompany.Feature.Navigation.Models
+@using System.Globalization
+@using Newtonsoft.Json.Linq
+
+@inject HttpClient HttpClient
+
+@if (SupportedLanguages?.Any() == true)
+{
+    <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+           @SupportedLanguages.FirstOrDefault(l => l.IsSelected)?.NativeName
+        </a>
+        <div class="navbar-dropdown is-boxed">
+            @foreach (var language in SupportedLanguages)
+            {
+                <a class="navbar-item" href="@language.Url">
+                    @language.NativeName
+                </a>
+            }
+        </div>
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public IEnumerable<SupportedLanguage> SupportedLanguages { get; set; }
+
+}

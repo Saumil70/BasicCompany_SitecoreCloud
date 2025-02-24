@@ -1,0 +1,12 @@
+﻿@using BasicCompany.Feature.Products.Models
+@using GenericRazorHelpers
+@inherits BaseModelComponent<BasicCompany.Feature.Products.Models.ProductList>
+
+<div class="container">
+    <div class="product-list-columns columns is-multiline">
+        @foreach (var product in Model.Products)
+        {
+            <_ListProduct Model="product" />
+        }
+    </div>
+</div>

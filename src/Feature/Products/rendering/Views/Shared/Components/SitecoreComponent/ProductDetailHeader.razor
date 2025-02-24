@@ -1,0 +1,13 @@
+﻿@using BasicCompany.Feature.Products
+@using BasicCompany.Feature.Products.Models
+@using GenericRazorHelpers
+@inherits BaseModelComponent<BasicCompany.Feature.Products.Models.ProductDetailHeader>
+
+<div class="container">
+    <section class="hero is-small product-detail-hero">
+        <div class="hero-body">
+            <h1 class="title">@Model.Title.Value</h1>
+            <h2 class="subtitle is-one-quarter">@Model.ShortDescription.Value</h2>
+        </div>
+    </section>
+</div>

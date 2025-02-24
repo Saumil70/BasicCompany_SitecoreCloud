@@ -1,0 +1,18 @@
+﻿@using BasicCompany.Feature.Services.Models
+@using GenericRazorHelpers
+@using Microsoft.AspNetCore.Components
+@inherits BaseModelComponent<BasicCompany.Feature.Services.Models.AccordionItem>
+
+@{
+    // always render accordions open in EE with button hidden
+    string bodyStyle = Model.IsEditing ? "max-height: 100rem" : null;
+}
+<div class="accordion-item">
+    <div class="accordion-header">
+        <h3>@Model.Title.Value</h3>
+        <button></button>
+    </div>
+    <div class="accordion-body" style="@bodyStyle">
+        <sc-text>@((MarkupString)Model.Content.Value)</sc-text>
+    </div>
+</div>

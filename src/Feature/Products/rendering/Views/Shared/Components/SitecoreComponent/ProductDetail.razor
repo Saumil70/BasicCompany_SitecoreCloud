@@ -1,0 +1,17 @@
+﻿@using BasicCompany.Feature.Products
+@using BasicCompany.Feature.Products.Localization
+@using GenericRazorHelpers
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<ProductsResource> Localizer
+@inherits BaseModelComponent<BasicCompany.Feature.Products.Models.ProductDetail>
+
+<section class="product-detail columns is-centered is-vcentered">
+    <div class="product-details column is-narrow has-text-centered-mobile">
+        <h5>@Localizer["Price"]</h5>
+        <p class="price">$@Model.Price.Value</p>
+        <div>@((MarkupString)Model.Features.Value)</div>
+    </div>
+    <div class="product-image column is-3">
+        <img src="@Model.Image.Value.Src" alt="Product Image" style="max-width: 480px;" />
+    </div>
+</section>

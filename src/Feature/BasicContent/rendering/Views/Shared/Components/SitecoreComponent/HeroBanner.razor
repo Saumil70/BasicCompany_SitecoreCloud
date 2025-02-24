@@ -1,0 +1,12 @@
+﻿@using GenericRazorHelpers
+@using Sitecore.LayoutService.Client.Response.Model
+@inherits BaseModelComponent<BasicCompany.Feature.BasicContent.Models.HeroBannerModel>
+
+<section class="hero is-medium is-black" style="background-image: url(@Model.Image.Value.Src)">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title">@Model.Title.Value</h1>
+            <h2 class="subtitle">@Model.Subtitle.Value</h2>
+        </div>
+    </div>
+</section>

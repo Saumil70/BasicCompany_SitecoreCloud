@@ -1,0 +1,51 @@
+﻿@using GenericRazorHelpers.SxaModels.Generic
+@using Microsoft.AspNetCore.Html
+
+@if (Field != null && (!string.IsNullOrWhiteSpace(Field.Value.Href) || (IsEditable && !string.IsNullOrEmpty(Field.EditableMarkupFirst) && !string.IsNullOrWhiteSpace(Field.EditableMarkupLast))))
+{
+    if (IsEditable && !string.IsNullOrEmpty(Field.EditableMarkupFirst) && !string.IsNullOrWhiteSpace(Field.EditableMarkupLast))
+    {
+        @if (ChildContent != null)
+        {
+            @ChildContent
+        }
+        else
+        {
+            @((MarkupString)Field.EditableMarkupFirst)
+            @((MarkupString)Field.EditableMarkupLast)
+        }
+    }
+    else
+    {
+        <div class="@CssClass">
+            <a href="@Field.Value.Href"
+               target="@(string.IsNullOrWhiteSpace(Field.Value.Target) ? null : Field.Value.Target)"
+               title="@(string.IsNullOrWhiteSpace(Field.Value.Title) ? null : Field.Value.Title)"
+               class="@(string.IsNullOrWhiteSpace(Field.Value.Class) ? null : Field.Value.Class)"
+               rel="@(Field.Value.Target == "_blank" ? "noopener noreferrer" : null)">
+                @if (ChildContent == null)
+                {
+                    @Field.Value.Text
+                }
+                else
+                {
+                    @ChildContent
+                }
+            </a>
+        </div>
+    }
+}
+
+@code {
+    [Parameter]
+    public HyperLinkField Field { get; set; }
+
+    [Parameter]
+    public bool IsEditable { get; set; } = true;
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public string CssClass { get; set; }
+}

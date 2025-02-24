@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+    <RootNamespace>BasicCompany.Feature.BasicContent</RootNamespace>
+    <AssemblyName>BasicCompany.Feature.BasicContent</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="bin\**" />
+    <Compile Remove="Views\Shared\Components\**" />
+    <Content Remove="bin\**" />
+    <Content Remove="Views\Shared\Components\**" />
+    <EmbeddedResource Remove="bin\**" />
+    <EmbeddedResource Remove="Views\Shared\Components\**" />
+    <None Remove="bin\**" />
+    <None Remove="Views\Shared\Components\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Sitecore.LayoutService.Client" />
+    <PackageReference Include="Sitecore.AspNet.RenderingEngine" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\GenericRazorHelpers\GenericRazorHelpers.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Shared\" />
+  </ItemGroup>
+
+</Project>

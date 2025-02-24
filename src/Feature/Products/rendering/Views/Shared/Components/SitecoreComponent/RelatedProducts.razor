@@ -1,0 +1,17 @@
+﻿@using BasicCompany.Feature.Products.Localization
+@using BasicCompany.Feature.Products.Models
+@using GenericRazorHelpers
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<ProductsResource> Localizer
+@inherits BaseModelComponent<BasicCompany.Feature.Products.Models.RelatedProductsList>
+
+<div class="container">
+    <h3 class="title">@Localizer["RelatedProducts"]</h3>
+
+    <div class="product-list-columns columns is-multiline">
+        @foreach (var product in Model.RelatedProducts)
+        {
+            <_ListProduct Model="product" />
+        }
+    </div>
+</div>

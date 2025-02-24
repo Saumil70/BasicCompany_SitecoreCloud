@@ -1,0 +1,31 @@
+﻿@using GenericRazorHelpers
+@using Sitecore.LayoutService.Client.Response.Model
+@using Microsoft.AspNetCore.Components
+@using BasicCompany.Blazor.Models
+@inherits BaseModelComponent<Models.BasicContent.FrontProduct>
+
+<section class="front-product">
+    <div class="container-fluid p-0">
+        <div class="row align-items-center">
+
+            <div class="col-lg-6 col-12">
+                <img src="@Model.Image.Value.Src" class="img-fluid" alt="">
+            </div>
+
+            <div class="col-lg-6 col-12">
+                <div class="px-5 py-5 py-lg-0">
+
+                    <h2 class="mb-4">@Model.Headline.Value</h2>
+
+                    <p class="lead mb-4">@((MarkupString)Model.Text.Value)</p>
+
+                    <a href="@Model.Link.Value.Href" class="custom-link">
+                        @Model.Link.Value.Text
+                        <i class="bi-arrow-right ms-2"></i>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

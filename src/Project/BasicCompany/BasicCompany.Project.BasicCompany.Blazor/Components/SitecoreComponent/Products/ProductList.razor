@@ -1,0 +1,80 @@
+﻿@using BasicCompany.Feature.Products.Services
+@using Sitecore.Data.Items
+@using GenericRazorHelpers
+@using Sitecore.LayoutService.Client.Response.Model.Fields
+@using BasicCompany.Blazor.Models.Products
+@using Newtonsoft.Json
+@using Sitecore.AspNet.RenderingEngine.Extensions
+@using BasicCompany.Blazor.RestGateway
+@inject IRestGatewayManager RestGatewayManager
+@inject Microsoft.Extensions.Options.IOptions<BasicCompany.Blazor.Configuration.SitecoreOptions> SitecoreOptions
+
+@inherits BaseModelComponent<Models.Products.ProductList>
+
+<div class="container">
+    <div class="columns is-multiline" style="margin-top: 5px;">
+        <div class="column is-12">
+            <div class="field">
+                <div class="control">
+                    <input class="input" type="text" placeholder="Search" style="max-width: fit-content;" @bind="searchText" @oninput="FilterProducts" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-list-columns columns is-multiline">
+        @foreach (ProductModel product in filteredProducts)
+        {
+            <_ListProduct Model="product" />
+        }
+    </div>
+</div>
+
+@code {
+    private string searchText = string.Empty;
+    private List<ProductModel> filteredProducts = new List<ProductModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ChangeEventArgs eventArgs = new ChangeEventArgs();
+        await FilterProducts(eventArgs);
+    }
+
+    private async Task FilterProducts(ChangeEventArgs e)
+    {
+        if (e.Value != null)
+        {
+            searchText = e.Value.ToString();
+        }
+        try
+        {
+            string templateId = SitecoreOptions.Value.ProductTemplateId;
+            string searchService = SitecoreOptions.Value.SearchUrl.ToString();
+            string url = $"{searchService}/SearchProducts?searchText={searchText}&templateId={templateId}";
+
+            RestResponse<List<ProductResponse>> response = await RestGatewayManager.GetAsync<List<ProductResponse>>(url, null, RestEndPointManager.RestEndpoint.CE, null);
+            if (response.IsSuccessful)
+            {
+                List<ProductResponse> productResponses = response.ResultData;
+                if (productResponses != null)
+                {
+                    filteredProducts = productResponses.Select(pr => new ProductModel
+                        {
+                            Title = pr.Title,
+                            ShortDescription = pr.ShortDescription,
+                            ImageUrl = pr.ImageUrl,
+                            ItemUrl = pr.ItemUrl
+                        }).ToList();
+                }
+            }
+            else
+            {
+                Console.WriteLine(response.ErrorMessage);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+}

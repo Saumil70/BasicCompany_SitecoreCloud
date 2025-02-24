@@ -1,0 +1,40 @@
+﻿@using System.Text.RegularExpressions
+@using GenericRazorHelpers.SxaModels.Generic
+@using Microsoft.AspNetCore.Components
+
+<div class="@CssClass">
+    @if (Field != null)
+    {
+        string textContent = Editable && !string.IsNullOrEmpty(Field.EditableMarkup)
+        ? Field.EditableMarkup
+        : Field.Value ?? string.Empty;
+
+        if (ConvertNewLines)
+        {
+            textContent = Regex.Replace(textContent, "\r?\n", "<br />");
+        }
+
+        if (Editable)
+        {
+            @((MarkupString)textContent)
+        }
+        else
+        {
+            <span>@textContent</span>
+        }
+    }
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public TextField Field { get; set; }
+
+    [Parameter]
+    public bool ConvertNewLines { get; set; } = true;
+
+    [Parameter]
+    public bool Editable { get; set; } = true;
+
+    [Parameter]
+    public string CssClass { get; set; }
+}

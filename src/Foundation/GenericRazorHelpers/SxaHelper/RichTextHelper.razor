@@ -1,0 +1,18 @@
+﻿
+@using GenericRazorHelpers.SxaModels.Generic
+@using Microsoft.AspNetCore.Components
+
+@if (TextModel != null)
+{
+    @((MarkupString)(Editable && !string.IsNullOrEmpty(TextModel.EditableMarkup)
+            ? TextModel.EditableMarkup
+            : TextModel.Value))
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public RichTextField? TextModel { get; set; }
+
+    [Parameter]
+    public bool Editable { get; set; } = true;
+}

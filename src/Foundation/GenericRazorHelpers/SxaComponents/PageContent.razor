@@ -1,0 +1,17 @@
+﻿@using GenericRazorHelpers.SxaHelper
+@inherits BaseModelComponent<GenericRazorHelpers.SxaModels.PageContent>
+
+<div class="component content @Model.Styles @Model.GridParameters" id="@Model.Id">
+    <div class="component-content">
+        @if (Model.Text != null)
+        {
+            <div class="field-content">
+                <RichTextHelper TextModel="Model.Text" />
+            </div>
+        }
+        else
+        {
+            <div class="field-content">[Text]</div>
+        }
+    </div>
+</div>

@@ -1,0 +1,39 @@
+﻿@using GenericRazorHelpers.SxaHelper
+@inherits BaseModelComponent<GenericRazorHelpers.SxaModels.Image>
+
+@if (Model.FieldNames == GenericRazorHelpers.SxaModels.Image.VARIANT_BANNER)
+{
+    string classHeroBannerEmpty = Model.IsEditing && string.IsNullOrWhiteSpace(Model.ImageField?.Value.Src) ? "hero-banner-empty" : string.Empty;
+    string backgroundStyle = !string.IsNullOrWhiteSpace(Model?.ImageField?.Value.Src) ? $"background-image: url('{@Model.ImageField?.Value.Src}')" : string.Empty;
+
+    <div class="component hero-banner @Model?.Styles @Model?.GridParameters @classHeroBannerEmpty" id="@Model?.Id">
+        <div class="component-content sc-sxa-image-hero-banner" style="@backgroundStyle">
+            @if (Model?.IsEditing ?? false)
+            {
+                <ImageHelper For="Model.ImageField" />
+            }
+        </div>
+    </div>
+}
+else
+{
+    <div class="component image @Model.Styles @Model.GridParameters" id="@Model.Id">
+        <div class="component-content">
+            <span class="sc-image-wrapper">
+                @if (Model.IsEditing || string.IsNullOrWhiteSpace(Model.TargetUrl?.Value.Href))
+                {
+                    <ImageHelper For="Model.ImageField" />
+                }
+                else
+                { 
+                    <LinkHelper Field="Model.TargetUrl">
+                        <ImageHelper For="Model.ImageField" />
+                    </LinkHelper>
+                }
+            </span>
+            <span class="image-caption field-imagecaption">
+                <TextFieldHelper Field="Model.ImageCaption"/>
+            </span>
+        </div>
+    </div>
+}

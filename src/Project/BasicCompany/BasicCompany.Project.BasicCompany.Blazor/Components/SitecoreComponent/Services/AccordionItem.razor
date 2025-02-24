@@ -1,0 +1,27 @@
+﻿
+@using GenericRazorHelpers
+@using Microsoft.AspNetCore.Components
+@inherits BaseModelComponent< BasicCompany.Blazor.Models.Services.AccordionItem>
+
+@{
+    // always render accordions open in EE with button hidden
+    string bodyStyle = Model.IsEditing ? "max-height: 100rem" : null;
+}
+<div class="accordion-item @(IsActive ? "is-active":"")" >
+    <div class="accordion-header">
+        <h3>@Model.Title.Value</h3>
+        <button @onclick="ToggleActive"></button>
+    </div>
+    <div class="accordion-body" style="@bodyStyle">
+        <sc-text>@((MarkupString)Model.Content.Value)</sc-text>
+    </div>
+</div>
+
+@code{
+    private bool IsActive = false;
+
+    private void ToggleActive()
+    {
+        IsActive = !IsActive;
+    }
+}

@@ -1,0 +1,256 @@
+﻿@namespace GenericRazorHelpers.PlaceholderHelper﻿
+@using GenericRazorHelpers.Service
+@using Microsoft.AspNetCore.Html
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Mvc
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using Microsoft.AspNetCore.Mvc.RazorPages
+@using Microsoft.AspNetCore.Mvc.ViewFeatures
+@using Sitecore.AspNet.RenderingEngine.Rendering
+@using Sitecore.AspNet.RenderingEngine
+@using Sitecore.Diagnostics
+@using Sitecore.LayoutService.Client.Response.Model
+@using Microsoft.Extensions.DependencyInjection
+@using System.Text
+@using System.Text.Encodings.Web
+@using System.Reflection
+@inject RouteService RouteService
+
+@inject IServiceProvider ServiceProvider
+@inject IEditableChromeRenderer ChromeRenderer
+@inject IHttpContextAccessor HttpContextAccessor
+@inject IComponentRendererFactory _componentRendererFactory;
+
+@if (placeholderFeatures == null)
+{
+    <h1>Placeholder not found</h1>
+    return;
+}
+@foreach (IPlaceholderFeature item in placeholderFeatures)
+{
+    if (item is Component component)
+    {
+        var componentName = component.Name;
+        var componentType = GetType(componentName);
+
+        if (component.Parameters.ContainsKey("isUsed") && component.Parameters["isUsed"] == "true")
+        {
+            component.Parameters["isUsed"] = "false";
+        }
+
+        if (componentType != null)
+        {
+            var parameters = new Dictionary<string, object> { { "Component", component } };
+            if (parameters.Count != 0 && parameters != null)
+            {
+                <DynamicComponent Type="componentType" Parameters="parameters" />
+            }
+            else
+            {
+                <DynamicComponent Type="componentType" />
+            }
+        }
+    }
+    else if (item is EditableChrome editableChrome)
+    {
+        // Handle EditableChrome logic
+        var htmlContent = ChromeRenderer.Render(editableChrome);
+        MarkupString chromeHtml = new MarkupString(htmlContent.ToString());
+        @chromeHtml
+    }
+}
+
+@code {
+    [Parameter]
+    public string? Name { get; set; }
+
+    private string? renderedContent;
+
+    public Placeholder placeholderFeatures { get; set; }
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ProcessAsync();
+    }
+
+    private async Task ProcessAsync()
+    {
+
+        string placeholderName = Name ?? string.Empty;
+        if (string.IsNullOrEmpty(placeholderName))
+        {
+            renderedContent = "<!-- Placeholder name was not defined -->";
+            return;
+        }
+
+        // var httpContext = HttpContextAccessor.HttpContext;
+        // if (httpContext == null)
+        // {
+        //     throw new NullReferenceException("HttpContext cannot be null.");
+        // }
+
+        //ISitecoreRenderingContext renderingContext = httpContext.GetSitecoreRenderingContext();
+        // if (renderingContext == null)
+        // {
+        //     throw new NullReferenceException("Sitecore rendering context cannot be null.");
+        // }
+
+
+        placeholderFeatures = GetPlaceholderFeatures(placeholderName);
+        if (placeholderFeatures == null)
+        {
+            renderedContent = "<!-- Placeholder was not defined -->";
+            return;
+        }
+    }
+
+    private Placeholder? GetPlaceholderFeatures(string placeholderName)
+    {
+        Placeholder? value = null;
+        // renderingContext.Component?.Placeholders.TryGetValue(placeholderName, out value);
+        // if (value != null && value.Any())
+        // {
+        //     return value;
+        // }
+        Route route = RouteService.GetRoute();
+        GenericRazorHelpers.Context context = RouteService.Context(route);
+        route.Placeholders.TryGetValue(placeholderName, out value);
+
+        if (value != null && value.Any())
+        {
+            return value;
+        }
+
+        var visited = new HashSet<object>();
+
+        value = FindNestedPlaceholder(placeholderName, route.Placeholders, visited);
+
+        return value;
+    }
+
+    private Placeholder? FindNestedPlaceholder(string placeholderName, Dictionary<string, Placeholder> placeholders, HashSet<object> visited = null)
+    {
+        visited ??= new HashSet<object>();
+
+        Placeholder? value = null;
+
+        foreach (var item in placeholders)
+        {
+            // Avoid processing the same object multiple times.
+            if (!visited.Add(item.Value))
+            {
+                continue;
+            }
+
+            if (item.Value.Any())
+            {
+                foreach (Component valitem in item.Value.OfType<Component>())
+                {
+                    // Avoid processing the same component multiple times.
+                    if (!visited.Add(valitem))
+                    {
+                        continue;
+                    }
+
+                    if (valitem.Placeholders.Any())
+                    {
+                        valitem.Placeholders.TryGetValue(placeholderName, out value);
+                        if (value != null && value.Any())
+                        {
+                            if (!valitem.Parameters.ContainsKey("isUsed") || valitem.Parameters["isUsed"] == "false")
+                            {
+                                valitem.Parameters["isUsed"] = "true";
+                                return value;
+                            }
+                        }
+
+                        var nestedResult = FindNestedPlaceholder(placeholderName, valitem.Placeholders, visited);
+                        if (nestedResult != null)
+                        {
+                            return nestedResult;
+                        }
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    internal class ComponentHolder : IDisposable
+    {
+        private readonly ISitecoreRenderingContext _renderingContext;
+        private readonly Component? _oldContextComponent;
+
+        public ComponentHolder(ISitecoreRenderingContext renderingContext, Component component)
+        {
+            _renderingContext = renderingContext;
+            _oldContextComponent = _renderingContext.Component;
+            _renderingContext.Component = component;
+        }
+
+        public void Dispose()
+        {
+            _renderingContext.Component = _oldContextComponent;
+        }
+    }
+
+    private Type? GetType(string parameter)
+    {
+        if (string.IsNullOrEmpty(parameter))
+        {
+            throw new ArgumentException("Parameter cannot be null or empty.", nameof(parameter));
+        }
+
+        var pascalCaseParameter = ConvertToPascalCase(parameter);
+
+        // Iterate through all loaded assemblies in the current AppDomain
+        foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+        {
+            try
+            {
+                var type = assembly.GetExportedTypes()
+                                   .FirstOrDefault(t => t.Name.Equals(pascalCaseParameter, StringComparison.OrdinalIgnoreCase));
+
+                if (type != null)
+                {
+                    return type;
+                }
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                Console.WriteLine($"Failed to load types from assembly {assembly.FullName}: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error in assembly {assembly.FullName}: {ex.Message}");
+            }
+        }
+
+        return null;
+    }
+
+
+    public static string ConvertToPascalCase(string input)
+    {
+        if (string.IsNullOrEmpty(input))
+        {
+            throw new ArgumentException("Input cannot be null or empty.", nameof(input));
+        }
+
+        var words = input.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+        for (var i = 0; i < words.Length; i++)
+        {
+            if (words[i].Length > 0)
+            {
+                words[i] = char.ToUpper(words[i][0]) + words[i][1..];
+            }
+        }
+
+        return string.Join(string.Empty, words);
+    }
+
+}

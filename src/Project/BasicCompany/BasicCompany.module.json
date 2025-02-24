@@ -1,0 +1,27 @@
+{
+    "namespace": "Project.BasicCompany",
+    "items": {
+        "includes": [
+            {
+                "name": "layouts",
+                "path": "/sitecore/layout/Layouts/Project/BasicCompany"
+            },
+            {
+                "name": "placeholders",
+                "path": "/sitecore/layout/Placeholder Settings/Project/BasicCompany"
+            },
+            {
+                "name": "templates",
+                "path": "/sitecore/templates/Project/Basic Company"
+            },
+            {
+                "name": "branches",
+                "path": "/sitecore/templates/Branches/Project/BasicCompany"
+            },
+            {
+                "name": "api-key",
+                "path": "/sitecore/system/Settings/Services/API Keys/basic-company"
+            }
+        ]
+    }
+}

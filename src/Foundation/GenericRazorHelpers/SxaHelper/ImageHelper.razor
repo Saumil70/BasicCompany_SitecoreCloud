@@ -1,0 +1,95 @@
+﻿@using GenericRazorHelpers.SxaModels.Generic
+@using HtmlAgilityPack
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Rendering
+@using Microsoft.AspNetCore.Components.Web
+@using Sitecore.AspNet.RenderingEngine.Extensions
+
+<div>
+    @if (For != null && For.Value != null && !string.IsNullOrWhiteSpace(For.Value.Src))
+    {
+        if (Editable && !string.IsNullOrEmpty(For.EditableMarkup))
+        {
+            @((MarkupString)MergeEditableMarkupWithCustomAttributes(For.EditableMarkup, For))
+        }
+        else
+        {
+            <img src="@For.GetMediaLink(ImageParams)"
+                 alt="@For.Value.Alt"
+                 class="@For.Value.Class"
+                 width="@For.Value.Width?.ToString()"
+                 height="@For.Value.Height?.ToString()"
+                 hspace="@For.Value.HSpace?.ToString()"
+                 vspace="@For.Value.VSpace?.ToString()"
+                 title="@For.Value.Title"
+                 border="@For.Value.Border?.ToString()" />
+        }
+    }
+</div>
+
+@code {
+    [Parameter]
+    public ImageField For { get; set; }
+
+    [Parameter]
+    public bool Editable { get; set; } = true;
+
+    [Parameter]
+    public object ImageParams { get; set; }
+
+    private MarkupString MergeEditableMarkupWithCustomAttributes(string editableMarkUp, ImageField imageField)
+    {
+        if (string.IsNullOrEmpty(editableMarkUp) || imageField == null || imageField.Value == null)
+        {
+            return new MarkupString(editableMarkUp);
+        }
+
+        HtmlDocument htmlDocument = new HtmlDocument();
+        htmlDocument.LoadHtml(editableMarkUp);
+        htmlDocument.OptionOutputOriginalCase = true;
+        htmlDocument.OptionWriteEmptyNodes = true;
+        HtmlNode htmlNode = htmlDocument.DocumentNode.SelectSingleNode("//img");
+
+        if (htmlNode != null)
+        {
+            if (!string.IsNullOrWhiteSpace(imageField.Value.Src))
+            {
+                htmlNode.SetAttributeValue("src", imageField.GetMediaLink(ImageParams));
+            }
+            if (!string.IsNullOrWhiteSpace(imageField.Value.Alt))
+            {
+                htmlNode.SetAttributeValue("alt", imageField.Value.Alt);
+            }
+            if (!string.IsNullOrWhiteSpace(imageField.Value.Class))
+            {
+                htmlNode.SetAttributeValue("class", imageField.Value.Class);
+            }
+            if (imageField.Value.Border.HasValue)
+            {
+                htmlNode.SetAttributeValue("border", imageField.Value.Border.ToString());
+            }
+            if (!string.IsNullOrWhiteSpace(imageField.Value.Title))
+            {
+                htmlNode.SetAttributeValue("title", imageField.Value.Title);
+            }
+            if (imageField.Value.HSpace.HasValue)
+            {
+                htmlNode.SetAttributeValue("hspace", imageField.Value.HSpace.ToString());
+            }
+            if (imageField.Value.VSpace.HasValue)
+            {
+                htmlNode.SetAttributeValue("vspace", imageField.Value.VSpace.ToString());
+            }
+            if (imageField.Value.Width.HasValue)
+            {
+                htmlNode.SetAttributeValue("width", imageField.Value.Width.ToString());
+            }
+            if (imageField.Value.Height.HasValue)
+            {
+                htmlNode.SetAttributeValue("height", imageField.Value.Height.ToString());
+            }
+        }
+
+        return new MarkupString(htmlDocument.DocumentNode.OuterHtml);
+    }
+}

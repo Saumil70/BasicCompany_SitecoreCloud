@@ -1,0 +1,8 @@
+﻿@using BasicCompany.Project.BasicCompany.Views.Default
+@model Route
+
+@{
+    ViewData["Title"] = Model.ReadField<TextField>("NavigationTitle")?.Value ?? Model.ReadField<TextField>("Title")?.Value ?? "Untitled";
+}
+
+<component type="typeof(DefaultRouteComponent)" render-mode="ServerPrerendered" />

@@ -1,0 +1,18 @@
+﻿@using GenericRazorHelpers
+@using GenericRazorHelpers.SxaHelper
+
+@inherits BaseModelComponent<GenericRazorHelpers.SxaModels.RichText>
+
+
+<div class="component rich-text @Model.Styles @Model.GridParameters" id="@Model.Id">
+    <div class="component-content">
+        @if (string.IsNullOrEmpty(Model.Text?.ToString()))
+        {
+            <span class="is-empty-hint">Rich text</span>
+        }
+        else
+        {
+            <RichTextHelper TextModel="@Model.Text" />
+        }
+    </div>
+</div>
