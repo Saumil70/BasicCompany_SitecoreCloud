@@ -1,6 +1,6 @@
 ﻿using GenericRazorHelpers.SxaModels.Generic;
 using Newtonsoft.Json;
-using Sitecore.AspNet.RenderingEngine.Binding.Attributes;
+using Sitecore.AspNetCore.SDK.RenderingEngine.Binding.Attributes;
 
 namespace GenericRazorHelpers.SxaModels
 {

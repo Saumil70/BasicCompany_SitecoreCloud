@@ -2,19 +2,19 @@
 {
     public class RouteService
     {
-        private Sitecore.LayoutService.Client.Response.Model.Route _route;
+        private Sitecore.AspNetCore.SDK.LayoutService.Client.Response.Model.Route _route;
 
-        public Sitecore.LayoutService.Client.Response.Model.Route GetRoute()
+        public Sitecore.AspNetCore.SDK.LayoutService.Client.Response.Model.Route GetRoute()
         {
             return _route;
         }
 
-        public void SetRoute(Sitecore.LayoutService.Client.Response.Model.Route route)
+        public void SetRoute(Sitecore.AspNetCore.SDK.LayoutService.Client.Response.Model.Route route)
         {
             _route = route;
         }
 
-        public Context Context(Sitecore.LayoutService.Client.Response.Model.Route route)
+        public Context Context(Sitecore.AspNetCore.SDK.LayoutService.Client.Response.Model.Route route)
         {
             Context context = new Context();
             context.Name = route.Name;

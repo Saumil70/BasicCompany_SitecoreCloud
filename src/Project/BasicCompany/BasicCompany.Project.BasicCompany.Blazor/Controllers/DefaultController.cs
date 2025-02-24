@@ -2,9 +2,8 @@
 using GenericRazorHelpers.Service;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Sitecore.AspNet.RenderingEngine;
-using Sitecore.AspNet.RenderingEngine.Filters;
-using Sitecore.LayoutService.Client.Exceptions;
+using Sitecore.AspNetCore.SDK.LayoutService.Client.Exceptions;
+using Sitecore.AspNetCore.SDK.RenderingEngine.Attributes;
 using System.Net;
 
 namespace BasicCompany.Blazor.Controllers
@@ -21,7 +20,7 @@ namespace BasicCompany.Blazor.Controllers
         // (enables model binding to Sitecore objects such as Route,
         // and causes requests to the Sitecore Layout Service for controller actions)
         [UseSitecoreRendering]
-        public IActionResult Index(Sitecore.LayoutService.Client.Response.Model.Route route, [FromServices] RouteService routeService)
+        public IActionResult Index(Sitecore.AspNetCore.SDK.LayoutService.Client.Response.Model.Route route, [FromServices] RouteService routeService)
         {
             var request = HttpContext.GetSitecoreRenderingContext();
 

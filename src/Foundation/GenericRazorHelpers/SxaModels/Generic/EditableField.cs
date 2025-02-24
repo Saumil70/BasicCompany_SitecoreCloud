@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using Sitecore.LayoutService.Client.Response.Model;
+using Sitecore.AspNetCore.SDK.LayoutService.Client.Response.Model;
 using System.Runtime.Serialization;
 
 

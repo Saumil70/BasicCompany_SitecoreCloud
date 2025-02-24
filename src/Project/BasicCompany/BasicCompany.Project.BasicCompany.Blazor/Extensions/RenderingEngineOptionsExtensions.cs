@@ -3,7 +3,7 @@ using BasicCompany.Blazor.Models.Navigation;
 using BasicCompany.Blazor.Models.Products;
 using BasicCompany.Blazor.Models.Services;
 using GenericRazorHelpers.RazorComponentHelper;
-using Sitecore.AspNet.RenderingEngine.Configuration;
+using Sitecore.AspNetCore.SDK.RenderingEngine.Configuration;
 
 namespace BasicCompany.Blazor.Extensions
 {

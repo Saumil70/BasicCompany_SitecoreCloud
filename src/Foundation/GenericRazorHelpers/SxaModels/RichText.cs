@@ -1,5 +1,5 @@
 ﻿using GenericRazorHelpers.SxaModels.Generic;
-using Sitecore.AspNet.RenderingEngine.Binding.Attributes;
+using Sitecore.AspNetCore.SDK.RenderingEngine.Binding.Attributes;
 namespace GenericRazorHelpers.SxaModels
 {
     public class RichText : BaseModel

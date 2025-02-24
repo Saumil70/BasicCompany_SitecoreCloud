@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Sitecore.LayoutService.Client.Response.Model;
+using Sitecore.AspNetCore.SDK.LayoutService.Client.Response.Model;
 
 namespace GenericRazorHelpers
 {

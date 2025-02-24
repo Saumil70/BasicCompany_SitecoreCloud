@@ -14,9 +14,9 @@
     <PackageReference Update="Sitecore.Assemblies.Platform" Version="$(PlatformVersion)" />
     <PackageReference Update="Sitecore.LayoutService" Version="6.0.0" />
     
-    <PackageReference Update="Sitecore.LayoutService.Client" Version="$(SitecoreAspNetVersion)" />
-    <PackageReference Update="Sitecore.AspNet.RenderingEngine" Version="$(SitecoreAspNetVersion)" />
-    <PackageReference Update="Sitecore.AspNet.ExperienceEditor" Version="$(SitecoreAspNetVersion)" />
+	<PackageReference Update="Sitecore.AspNetCore.SDK.ExperienceEditor" Version="0.0.11" />
+    <PackageReference Update="Sitecore.AspNetCore.SDK.LayoutService.Client" Version="0.0.11"/>
+    <PackageReference Update="Sitecore.AspNetCore.SDK.RenderingEngine" Version="0.0.11" />
     <PackageReference Update="Sitecore.AspNet.Tracking" Version="$(SitecoreAspNetVersion)" />
     <PackageReference Update="Sitecore.AspNet.Tracking.VisitorIdentification" Version="$(SitecoreAspNetVersion)" />
     

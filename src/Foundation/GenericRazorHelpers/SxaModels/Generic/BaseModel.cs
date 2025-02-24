@@ -1,5 +1,4 @@
-﻿using Sitecore.AspNet.RenderingEngine.Binding.Attributes;
-using Sitecore.AspNet.RenderingEngine.Binding;
+﻿using Sitecore.AspNetCore.SDK.RenderingEngine.Binding.Attributes;
 
 namespace GenericRazorHelpers.SxaModels.Generic
 {

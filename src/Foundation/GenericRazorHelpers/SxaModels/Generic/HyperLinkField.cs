@@ -1,7 +1,4 @@
-﻿using Sitecore.LayoutService.Client.Response.Model.Properties;
-using Sitecore.LayoutService.Client.Response.Model;
-
-namespace GenericRazorHelpers.SxaModels.Generic
+﻿namespace GenericRazorHelpers.SxaModels.Generic
 {
     public class HyperLinkField : WrappedEditableField<HyperLink>
     {

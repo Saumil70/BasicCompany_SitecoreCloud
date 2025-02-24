@@ -1,6 +1,7 @@
-﻿using Sitecore.AspNet.RenderingEngine.Configuration;
-using Sitecore.AspNet.RenderingEngine.Rendering;
+﻿using Sitecore.AspNetCore.SDK.RenderingEngine.Configuration;
+using Sitecore.AspNetCore.SDK.RenderingEngine.Rendering;
 using Sitecore.Diagnostics;
+
 
 namespace GenericRazorHelpers.RazorComponentHelper
 {

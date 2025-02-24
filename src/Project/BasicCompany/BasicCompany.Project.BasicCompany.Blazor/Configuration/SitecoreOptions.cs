@@ -15,8 +15,17 @@ namespace BasicCompany.Blazor.Configuration
         public string DefaultSiteName { get; set; }
         public string ApiKey { get; set; }
         public Uri RenderingHostUri { get; set; }
-        public string JssEditingSecret { get; set; }
-        public bool EnableExperienceEditor { get; set; }
+        public string? EditingSecret { get; set; }
+
+        public string? EdgeContextId { get; set; }
+
+        public bool EnableEditingMode { get; set; }
+
+        public string? EditingPath { get; set; }
+
+        public bool EnableLocalContainer { get; set; }
+
+        public Uri? LocalContainerLayoutUri { get; set; }
 
         public Uri LayoutServiceUri
         {

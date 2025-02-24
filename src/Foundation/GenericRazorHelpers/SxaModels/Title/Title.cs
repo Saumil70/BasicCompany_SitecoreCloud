@@ -12,12 +12,15 @@ public class Title : BaseModel
     {
         get
         {
-            return new HyperLinkField(
-                    new HyperLink
-                    {
-                        Anchor = TitleLocation?.Url?.Path,
-                        Title = TitleLocation?.Field?.JsonValue?.Value
-                    });
+            var hyperLink = new HyperLink
+            {
+                Anchor = TitleLocation?.Url?.Path,
+                Title = TitleLocation?.Field?.JsonValue?.Value
+            };
+            return new HyperLinkField(hyperLink)
+            {
+                Value = hyperLink
+            };
         }
     }
 
@@ -25,12 +28,13 @@ public class Title : BaseModel
     {
         get
         {
-            TextField textField = new TextField();
-            textField = TitleLocation?.Field?.JsonValue;
-            return textField;
+            var textField = TitleLocation?.Field?.JsonValue;
+            return new TextField
+            {
+                Value = textField?.Value
+            };
         }
     }
-
 
     public TitleLocation? TitleLocation
     {

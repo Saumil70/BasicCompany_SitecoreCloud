@@ -1,4 +1,4 @@
-﻿using Sitecore.AspNet.RenderingEngine.Binding.Attributes;
+﻿using Sitecore.AspNetCore.SDK.RenderingEngine.Binding.Attributes;
 
 namespace BasicCompany.Blazor.Models.Navigation
 {

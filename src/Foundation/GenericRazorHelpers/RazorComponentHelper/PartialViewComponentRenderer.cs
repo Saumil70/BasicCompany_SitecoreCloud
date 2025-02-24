@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Sitecore.AspNet.RenderingEngine;
-using Sitecore.AspNet.RenderingEngine.Rendering;
+using Sitecore.AspNetCore.SDK.RenderingEngine.Interfaces;
+using Sitecore.AspNetCore.SDK.RenderingEngine.Rendering;
 using Sitecore.Diagnostics;
 
 namespace GenericRazorHelpers.RazorComponentHelper

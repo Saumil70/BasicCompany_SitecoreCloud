@@ -1,25 +1,21 @@
 using BasicCompany.Blazor.Configuration;
 using BasicCompany.Blazor.Extensions;
 using BasicCompany.Blazor.RestGateway;
-using GenericRazorHelpers.Service;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Localization;
-using Sitecore.AspNet.ExperienceEditor;
-using Sitecore.AspNet.RenderingEngine.Extensions;
-using Sitecore.AspNet.RenderingEngine.Localization;
-using Sitecore.AspNet.Tracking;
-using Sitecore.LayoutService.Client.Extensions;
-using Sitecore.LayoutService.Client.Newtonsoft.Extensions;
-using Sitecore.LayoutService.Client.Request;
 using System.Globalization;
-using GenericRazorHelpers.Localizer;
 using Microsoft.Extensions.Localization;
-using System.Threading.Tasks;
+using GenericRazorHelpers.Localizer;
+using GenericRazorHelpers.Service;
+using Sitecore.AspNet.Tracking;
+using Sitecore.LayoutService.Client.Newtonsoft.Extensions;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Bind SitecoreOptions from configuration
-var sitecoreOptions = builder.Configuration.GetSection(SitecoreOptions.Key).Get<SitecoreOptions>();
+var sitecoreSettings = builder.Configuration.GetSection(SitecoreOptions.Key).Get<SitecoreOptions>();
 builder.Services.Configure<SitecoreOptions>(builder.Configuration.GetSection(SitecoreOptions.Key));
 
 var _defaultLanguage = "en";
@@ -41,22 +37,27 @@ builder.Services.AddControllers();
 builder.Services.Configure<SitecoreLocalizerOptions>(options => options.Cultures = _supportedCultures);
 builder.Services.AddHttpClient<ISitecoreLocalizer, SitecoreLocalizer>("sitecoreLocalizer", client =>
 {
-    client.BaseAddress = sitecoreOptions.DictionaryServiceUri;
+    client.BaseAddress = sitecoreSettings.DictionaryServiceUri;
 });
 
 builder.Services.AddTransient<ISitecoreLocalizer, SitecoreLocalizer>();
 builder.Services.AddTransient<IStringLocalizer, SitecoreLocalizer>();
 
 // Register the Sitecore Layout Service Client
-builder.Services.AddSitecoreLayoutService()
-    .WithDefaultRequestOptions(request =>
-    {
-        request
-            .SiteName(sitecoreOptions.DefaultSiteName)
-            .ApiKey(sitecoreOptions.ApiKey);
-    })
-    .AddHttpHandler("default", sitecoreOptions.LayoutServiceUri)
-    .AsDefaultHandler();
+if (sitecoreSettings.EnableLocalContainer)
+{
+    // Register the GraphQL version of the Sitecore Layout Service Client for use against local container endpoint
+    builder.Services.AddSitecoreLayoutService()
+                    .AddGraphQlHandler("default", sitecoreSettings.DefaultSiteName!, sitecoreSettings.EdgeContextId!, sitecoreSettings.LocalContainerLayoutUri!)
+                    .AsDefaultHandler();
+}
+else
+{
+    // Register the GraphQL version of the Sitecore Layout Service Client for use against experience edge
+    builder.Services.AddSitecoreLayoutService()
+                    .AddGraphQlWithContextHandler("default", sitecoreSettings.EdgeContextId!, siteName: sitecoreSettings.DefaultSiteName!)
+                    .AsDefaultHandler();
+}
 
 // Register the Sitecore Rendering Engine services
 builder.Services.AddSitecoreRenderingEngine(options =>
@@ -69,13 +70,12 @@ builder.Services.AddSitecoreRenderingEngine(options =>
         .AddDefaultPartialView("_ComponentNotFound");
 })
 .ForwardHeaders()
-.WithTracking()
-.WithExperienceEditor(req => req.JssEditingSecret = sitecoreOptions.JssEditingSecret);
+.WithExperienceEditor(req => req.JssEditingSecret = sitecoreSettings.EditingSecret);
 
 // Enable support for robot detection
 builder.Services.AddSitecoreVisitorIdentification(options =>
 {
-    options.SitecoreInstanceUri = sitecoreOptions.InstanceUri;
+    options.SitecoreInstanceUri = sitecoreSettings.InstanceUri;
 });
 
 builder.Services.AddSingleton<RouteService>();
@@ -96,7 +96,7 @@ else
     app.UseHsts();
 }
 
-if (sitecoreOptions.EnableExperienceEditor)
+if (sitecoreSettings.EnableEditingMode)
 {
     app.UseSitecoreExperienceEditor();
 }
