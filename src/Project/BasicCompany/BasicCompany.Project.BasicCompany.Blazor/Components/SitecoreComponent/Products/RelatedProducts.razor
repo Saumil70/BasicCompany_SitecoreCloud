@@ -3,11 +3,11 @@
 @using Microsoft.Extensions.Localization
 @using BasicCompany.Blazor.Models.Products
 
-@inject IStringLocalizer Localizer
+@* @inject IStringLocalizer Localizer *@
 @inherits BaseModelComponent<BasicCompany.Blazor.Models.Products.RelatedProductsList>
 
 <div class="container">
-    <h3 class="title">@Localizer["RelatedProducts"]</h3>
+    @* <h3 class="title">@Localizer["RelatedProducts"]</h3> *@
 
     <div class="product-list-columns columns is-multiline">
         @foreach (var product in Model.RelatedProducts)
