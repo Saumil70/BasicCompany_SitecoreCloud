@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Sitecore.AspNetCore.SDK.LayoutService.Client.Response.Model;
+using System.Reflection;
 
 namespace GenericRazorHelpers.FieldHelper
 {
@@ -9,7 +11,7 @@ namespace GenericRazorHelpers.FieldHelper
         {
             Dictionary<string, object>? dictionaryFields = new Dictionary<string, object>();
 
-            if (component.Parameters.Count != 0 )
+            if (component.Parameters.Count != 0)
             {
                 foreach (KeyValuePair<string, string> parameter in component.Parameters)
                 {
@@ -22,10 +24,17 @@ namespace GenericRazorHelpers.FieldHelper
                 foreach (KeyValuePair<string, IFieldReader> field in component.Fields)
                 {
                     var fieldValue = field.Value?.GetType()
-                        .GetField("_json", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?
-                        .GetValue(field.Value);
+                        .GetField("_json", BindingFlags.NonPublic | BindingFlags.Instance)?
+                        .GetValue(field.Value) as string;
 
-                    dictionaryFields[field.Key] = fieldValue;
+                    JObject fieldValueJObject = null;
+
+                    if (fieldValue != null)
+                    {
+                        fieldValueJObject = JObject.Parse(fieldValue);
+                    }
+
+                    dictionaryFields[field.Key] = fieldValueJObject;
                 }
             }
             return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(dictionaryFields));

@@ -62,12 +62,13 @@ else
 // Register the Sitecore Rendering Engine services
 builder.Services.AddSitecoreRenderingEngine(options =>
 {
-    options
-        .AddFeatureBasicContent()
-        .AddFeatureNavigation()
-        .AddFeatureProducts()
-        .AddFeatureServices()
-        .AddDefaultPartialView("_ComponentNotFound");
+    //options
+        //.AddFeatureBasicContent()
+        //.AddFeatureNavigation()
+        //.AddFeatureProducts()
+        //.AddFeatureServices()
+        //.AddDefaultPartialView("_ComponentNotFound")
+
 })
 .ForwardHeaders()
 .WithExperienceEditor(req => req.JssEditingSecret = sitecoreSettings.EditingSecret);

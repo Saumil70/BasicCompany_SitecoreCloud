@@ -205,26 +205,30 @@
 
         var pascalCaseParameter = ConvertToPascalCase(parameter);
 
-        // Iterate through all loaded assemblies in the current AppDomain
+        var targetAssemblies = new[] { "GenericRazorHelpers", "BasicCompany.Blazor" };
+
         foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
         {
-            try
+            if (targetAssemblies.Contains(assembly.GetName().Name))
             {
-                var type = assembly.GetExportedTypes()
-                                   .FirstOrDefault(t => t.Name.Equals(pascalCaseParameter, StringComparison.OrdinalIgnoreCase));
-
-                if (type != null)
+                try
                 {
-                    return type;
+                    var type = assembly.GetExportedTypes()
+                                       .FirstOrDefault(t => t.Name.Equals(pascalCaseParameter, StringComparison.OrdinalIgnoreCase));
+
+                    if (type != null)
+                    {
+                        return type;
+                    }
                 }
-            }
-            catch (ReflectionTypeLoadException ex)
-            {
-                Console.WriteLine($"Failed to load types from assembly {assembly.FullName}: {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Unexpected error in assembly {assembly.FullName}: {ex.Message}");
+                catch (ReflectionTypeLoadException ex)
+                {
+                    Console.WriteLine($"Failed to load types from assembly {assembly.FullName}: {ex.Message}");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Unexpected error in assembly {assembly.FullName}: {ex.Message}");
+                }
             }
         }
 

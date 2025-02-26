@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Sitecore.AspNetCore.SDK.RenderingEngine.Interfaces;
 using Sitecore.AspNetCore.SDK.RenderingEngine.Rendering;
-using Sitecore.Diagnostics;
 
 namespace GenericRazorHelpers.RazorComponentHelper
 {
@@ -17,14 +16,24 @@ namespace GenericRazorHelpers.RazorComponentHelper
 
         public PartialViewComponentRenderer(string componentName)
         {
-            Assert.ArgumentNotNullOrEmpty(componentName, "componentName");
+            if (string.IsNullOrWhiteSpace(componentName))
+            {
+                throw new ArgumentException("Component name cannot be null or empty", nameof(componentName));
+            }
             _componentName = componentName;
         }
 
         public async Task<IHtmlContent> Render(ISitecoreRenderingContext renderingContext, ViewContext viewContext)
         {
-            Assert.ArgumentNotNull(renderingContext, nameof(renderingContext));
-            Assert.ArgumentNotNull(viewContext, nameof(viewContext));
+            if (renderingContext == null)
+            {
+                throw new ArgumentNullException(nameof(renderingContext));
+            }
+
+            if (viewContext == null)
+            {
+                throw new ArgumentNullException(nameof(viewContext));
+            }
 
             var htmlHelper = viewContext.HttpContext.RequestServices.GetRequiredService<IHtmlHelper>();
 

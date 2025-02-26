@@ -10,7 +10,6 @@
     <PackageReference Include="Sitecore.AspNetCore.SDK.RenderingEngine" />
     <PackageReference Include="Sitecore.AspNetCore.SDK.LayoutService.Client" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
-    <PackageReference Include="Sitecore.Kernel"/>
 
   </ItemGroup>
 
