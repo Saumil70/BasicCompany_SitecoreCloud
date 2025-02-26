@@ -1,6 +1,5 @@
 using BasicCompany.Blazor.Configuration;
 using BasicCompany.Blazor.Extensions;
-using BasicCompany.Blazor.RestGateway;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
@@ -62,12 +61,6 @@ else
 // Register the Sitecore Rendering Engine services
 builder.Services.AddSitecoreRenderingEngine(options =>
 {
-    //options
-        //.AddFeatureBasicContent()
-        //.AddFeatureNavigation()
-        //.AddFeatureProducts()
-        //.AddFeatureServices()
-        //.AddDefaultPartialView("_ComponentNotFound")
 
 })
 .ForwardHeaders()
@@ -80,7 +73,6 @@ builder.Services.AddSitecoreVisitorIdentification(options =>
 });
 
 builder.Services.AddSingleton<RouteService>();
-builder.Services.AddScoped<IRestGatewayManager, RestGatewayManager>();
 
 var app = builder.Build();
 //app.UseMiddleware<BlazorRequestMiddleware>();

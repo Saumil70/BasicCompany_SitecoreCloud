@@ -7,12 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Feature\Products\platform\BasicCompany.Feature.Products.Platform.csproj" />
+    <Compile Remove="Models\SitecoreFields\**" />
+    <Content Remove="Models\SitecoreFields\**" />
+    <EmbeddedResource Remove="Models\SitecoreFields\**" />
+    <None Remove="Models\SitecoreFields\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\Foundation\GenericRazorHelpers\GenericRazorHelpers.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\SitecoreFields\" />
+    <Folder Include="Components\" />
   </ItemGroup>
 
   <ItemGroup>
