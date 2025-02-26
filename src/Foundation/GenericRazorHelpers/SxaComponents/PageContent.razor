@@ -1,12 +1,18 @@
-﻿@using GenericRazorHelpers.SxaHelper
+﻿@using GenericRazorHelpers.Service
+@using GenericRazorHelpers.SxaHelper
+@using System.Reflection
+@using GenericRazorHelpers.SxaModels.Generic
+@using Newtonsoft.Json
 @inherits BaseModelComponent<GenericRazorHelpers.SxaModels.PageContent>
+@inject RouteService RouteService
+
 
 <div class="component content @Model.Styles @Model.GridParameters" id="@Model.Id">
     <div class="component-content">
-        @if (Model.Text != null)
+        @if (Model.Content != null)
         {
             <div class="field-content">
-                <RichTextHelper TextModel="Model.Text" />
+                <RichTextHelper TextModel="Model.Content" />
             </div>
         }
         else
@@ -15,3 +21,25 @@
         }
     </div>
 </div>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        Sitecore.AspNetCore.SDK.LayoutService.Client.Response.Model.Route route = RouteService.GetRoute();
+        if (route.Fields.TryGetValue("Content", out var field))
+        {
+            var fieldType = field.GetType();
+            var jsonField = fieldType.GetField("_json", BindingFlags.NonPublic | BindingFlags.Instance);
+            var jsonValue = jsonField?.GetValue(field);
+            var deserializedObject = JsonConvert.DeserializeObject<RichTextField>(jsonValue.ToString());
+
+            await base.OnInitializedAsync();
+
+            if (Model != null)
+            {
+                Model.RouteContent = deserializedObject;
+            }
+        }
+    }
+
+}
