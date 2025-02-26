@@ -32,16 +32,6 @@ builder.Services
 
 builder.Services.AddControllers();
 
-// Dictionary registrations
-/*builder.Services.Configure<SitecoreLocalizerOptions>(options => options.Cultures = _supportedCultures);
-builder.Services.AddHttpClient<ISitecoreLocalizer, SitecoreLocalizer>("sitecoreLocalizer", client =>
-{
-    client.BaseAddress = sitecoreSettings.DictionaryServiceUri;
-});
-
-builder.Services.AddTransient<ISitecoreLocalizer, SitecoreLocalizer>();
-builder.Services.AddTransient<IStringLocalizer, SitecoreLocalizer>();*/
-
 // Register the Sitecore Layout Service Client
 if (sitecoreSettings.EnableLocalContainer)
 {
