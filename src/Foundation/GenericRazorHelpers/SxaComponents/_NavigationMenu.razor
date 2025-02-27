@@ -1,0 +1,27 @@
+﻿@using GenericRazorHelpers.SxaHelper
+@using GenericRazorHelpers.SxaModels.Navigation
+
+<ul class="clearfix">
+    @foreach (NavigationItem navItem in @Model.CustomContent ?? [])
+    {
+        string classNames = $"{string.Join(" ", navItem.Styles ?? [])} rel-level{Model.MenuLevel}";
+
+        <li class="@classNames">
+            <div class="navigation-title @(navItem.Children?.Count > 0 ? "child" : "")">
+                <a href="@navItem.Href">
+                    <TextFieldHelper Field="navItem.NavigationTitle"/>
+                </a>
+            </div>
+
+            @{
+                var model = new GenericRazorHelpers.SxaModels.Navigation.Navigation(navItem.Children, Model.MenuLevel + 1);
+            }
+            <_NavigationMenu Model="model"/>
+        </li>
+    }
+</ul>
+
+@code{
+    [Parameter]
+    public GenericRazorHelpers.SxaModels.Navigation.Navigation Model { get; set; }
+}

@@ -1,0 +1,14 @@
+﻿@inherits BaseModelComponent<GenericRazorHelpers.SxaModels.Navigation.Navigation>
+
+<div class="component navigation @Model.Styles @Model.GridParameters" id="@Model.Id">
+    <label class="menu-mobile-navigate-wrapper">
+        <input type="checkbox"
+               class="menu-mobile-navigate" />
+        <div class="menu-humburger" />
+        <div class="component-content">
+            <nav>
+                <_NavigationMenu Model='Model' />
+            </nav>
+        </div>
+    </label>
+</div>

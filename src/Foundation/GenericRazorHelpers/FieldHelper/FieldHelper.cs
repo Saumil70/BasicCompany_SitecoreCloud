@@ -27,14 +27,14 @@ namespace GenericRazorHelpers.FieldHelper
                         .GetField("_json", BindingFlags.NonPublic | BindingFlags.Instance)?
                         .GetValue(field.Value) as string;
 
-                    JObject fieldValueJObject = null;
+                    JToken fieldValueJToken = null;
 
                     if (fieldValue != null)
                     {
-                        fieldValueJObject = JObject.Parse(fieldValue);
+                        fieldValueJToken = JToken.Parse(fieldValue);
                     }
 
-                    dictionaryFields[field.Key] = fieldValueJObject;
+                    dictionaryFields[field.Key] = fieldValueJToken;
                 }
             }
             return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(dictionaryFields));
