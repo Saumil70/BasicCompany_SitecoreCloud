@@ -23,6 +23,7 @@ namespace BasicCompany.Blazor.Controllers
         public IActionResult Index(Sitecore.AspNetCore.SDK.LayoutService.Client.Response.Model.Route route, [FromServices] RouteService routeService)
         {
             var request = HttpContext.GetSitecoreRenderingContext();
+            IActionResult result = Empty;
 
             if (request.Response.HasErrors)
             {
@@ -30,9 +31,9 @@ namespace BasicCompany.Blazor.Controllers
                 {
                     switch (error)
                     {
-                        case ItemNotFoundSitecoreLayoutServiceClientException notFound:
-                            Response.StatusCode = (int)HttpStatusCode.NotFound;
-                            return View("NotFound", request.Response.Content.Sitecore.Context);
+                        case ItemNotFoundSitecoreLayoutServiceClientException:
+                            result = View("NotFound");
+                            break;
                         case InvalidRequestSitecoreLayoutServiceClientException badRequest:
                         case CouldNotContactSitecoreLayoutServiceClientException transportError:
                         case InvalidResponseSitecoreLayoutServiceClientException serverError:
