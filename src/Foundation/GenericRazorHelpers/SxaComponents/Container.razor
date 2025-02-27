@@ -1,0 +1,20 @@
+﻿@using GenericRazorHelpers.PlaceholderHelper
+@inherits BaseModelComponent<GenericRazorHelpers.SxaModels.Container>
+
+@if (Model.OutputContainerWrapper)
+{
+    @((MarkupString)("<div class=\"container-wrapper\">"))
+}
+
+<div class="component container-default @Model.GridParameters @Model.Styles" style="@Model.BackgroundStyle" id="@Model.Id">
+    <div class="component-content">
+        <div class="row">
+            <PlaceholderHelper Name="container-{*}"></PlaceholderHelper>
+        </div>
+    </div>
+</div>
+
+@if (Model.OutputContainerWrapper)
+{
+    @((MarkupString)("</div>"))
+}

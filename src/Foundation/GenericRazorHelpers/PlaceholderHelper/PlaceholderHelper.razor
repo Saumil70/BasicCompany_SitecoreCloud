@@ -60,6 +60,7 @@
 }
 
 @code {
+
     [Parameter]
     public string? Name { get; set; }
 
@@ -122,40 +123,25 @@
             return value;
         }
 
-        var visited = new HashSet<object>();
-
-        value = FindNestedPlaceholder(placeholderName, route.Placeholders, visited);
+        value = FindNestedPlaceholder(placeholderName, route.Placeholders);
 
         return value;
     }
 
-    private Placeholder? FindNestedPlaceholder(string placeholderName, Dictionary<string, Placeholder> placeholders, HashSet<object> visited = null)
+    private Placeholder? FindNestedPlaceholder(string placeholderName, Dictionary<string, Placeholder> placeholders)
     {
-        visited ??= new HashSet<object>();
-
         Placeholder? value = null;
 
         foreach (var item in placeholders)
         {
-            // Avoid processing the same object multiple times.
-            if (!visited.Add(item.Value))
-            {
-                continue;
-            }
-
             if (item.Value.Any())
             {
                 foreach (Component valitem in item.Value.OfType<Component>())
                 {
-                    // Avoid processing the same component multiple times.
-                    if (!visited.Add(valitem))
-                    {
-                        continue;
-                    }
-
                     if (valitem.Placeholders.Any())
                     {
                         valitem.Placeholders.TryGetValue(placeholderName, out value);
+
                         if (value != null && value.Any())
                         {
                             if (!valitem.Parameters.ContainsKey("isUsed") || valitem.Parameters["isUsed"] == "false")
@@ -163,9 +149,14 @@
                                 valitem.Parameters["isUsed"] = "true";
                                 return value;
                             }
+                            else if (!valitem.Parameters.ContainsKey($"Placeholder-{placeholderName}"))
+                            {
+                                valitem.Parameters[$"Placeholder-{placeholderName}"] = placeholderName;
+                                return value;
+                            }
                         }
 
-                        var nestedResult = FindNestedPlaceholder(placeholderName, valitem.Placeholders, visited);
+                        var nestedResult = FindNestedPlaceholder(placeholderName, valitem.Placeholders);
                         if (nestedResult != null)
                         {
                             return nestedResult;
