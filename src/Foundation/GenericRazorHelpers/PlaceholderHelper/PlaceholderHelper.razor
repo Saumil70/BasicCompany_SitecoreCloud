@@ -37,6 +37,16 @@
             component.Parameters["isUsed"] = "false";
         }
 
+        var keysToRemove = component.Parameters.Keys.Where(key => key.StartsWith("Placeholder")).ToList();
+
+        if(keysToRemove.Count != 0 && keysToRemove != null)
+        {
+            foreach (var key in keysToRemove)
+            {
+                component.Parameters.Remove(key);
+            }
+        }
+
         if (componentType != null)
         {
             var parameters = new Dictionary<string, object> { { "Component", component } };
@@ -147,6 +157,7 @@
                             if (!valitem.Parameters.ContainsKey("isUsed") || valitem.Parameters["isUsed"] == "false")
                             {
                                 valitem.Parameters["isUsed"] = "true";
+                                valitem.Parameters[$"Placeholder-{placeholderName}"] = placeholderName;
                                 return value;
                             }
                             else if (!valitem.Parameters.ContainsKey($"Placeholder-{placeholderName}"))
