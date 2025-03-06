@@ -29,10 +29,7 @@ public class Title : BaseModel
         get
         {
             var textField = TitleLocation?.Field?.JsonValue;
-            return new TextField
-            {
-                Value = textField?.Value
-            };
+            return textField;
         }
     }
 

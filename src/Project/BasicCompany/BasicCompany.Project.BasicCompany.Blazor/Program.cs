@@ -1,5 +1,4 @@
 using BasicCompany.Blazor.Configuration;
-using BasicCompany.Blazor.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
@@ -49,10 +48,7 @@ else
 }
 
 // Register the Sitecore Rendering Engine services
-builder.Services.AddSitecoreRenderingEngine(options =>
-{
-
-})
+builder.Services.AddSitecoreRenderingEngine()
 .ForwardHeaders()
 .WithExperienceEditor(req => req.JssEditingSecret = sitecoreSettings.EditingSecret);
 
