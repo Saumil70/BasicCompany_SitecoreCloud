@@ -8,8 +8,8 @@
 
         <li class="@classNames">
             <div class="navigation-title @(navItem.Children?.Count > 0 ? "child" : "")">
-                <a href="@navItem.Href">
-                    <TextFieldHelper Field="navItem.NavigationTitle"/>
+                <a href="@($"{navItem.Href}{(string.IsNullOrEmpty(navItem.QueryString) ? "" : "?" + navItem.QueryString)}")">
+                    <TextFieldHelper Field="navItem.NavigationTitle" />
                 </a>
             </div>
 
